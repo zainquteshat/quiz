@@ -1,0 +1,42 @@
+.Result {
+  background-color: white;
+  // background-color: #38484b;
+  width: 75vw;
+  height: 50vh;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.GiftIcon {
+  font-size: 150px;
+  color: #ffd575;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.Score {
+  font-size: 24px;
+  font-weight: 600;
+  // color: #24343b;
+  color: #4ae3b0;
+  margin-bottom: 40px;
+}
+// .NewQuizLink {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   text-decoration: none;
+//   font-size: 17px;
+//   background-color: #7779e2;
+//   font-weight: 600;
+//   color: white;
+//   padding: 10px;
+//   border-radius: 8px;
+//   width: 30%;
+// }
+
+// .AnotherQuizIcon {
+//   margin-left: 10px;
+// }

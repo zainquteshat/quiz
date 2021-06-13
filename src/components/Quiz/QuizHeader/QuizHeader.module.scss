@@ -1,0 +1,33 @@
+.QuizHeader {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.Star {
+  color: #ffbe00;
+  margin-left: 20px;
+}
+
+.ProgressInfo {
+  font-weight: 600;
+  margin-left: 9px;
+}
+
+.QuestionIcon {
+  color: #e55665;
+  margin-left: 20px;
+  margin-right: -2px;
+}
+
+.Info {
+  display: inherit;
+  align-items: center;
+}
+
+.LabelIcon {
+  color: #30bff3;
+}

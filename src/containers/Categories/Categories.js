@@ -1,9 +1,9 @@
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import PoolIcon from "@material-ui/icons/Pool";
-import PetsIcon from "@material-ui/icons/Pets";
-import DirectionsCarIcon from "@material-ui/icons/DirectionsCar";
+import CameraAltIcon from "@material-ui/icons/CameraAlt";
+import BrushIcon from "@material-ui/icons/Brush";
 import VideocamIcon from "@material-ui/icons/Videocam";
-import MusicNoteIcon from "@material-ui/icons/MusicNote";
+import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
 
 import Category from "../../components/Category/Category";
 import classes from "./Categories.module.scss";
@@ -12,12 +12,36 @@ const Categories = () => {
   return (
     <div>
       <div className={classes.Categories}>
-        <Category title={"General Knowledge"} icon={<MenuBookIcon />} />
-        <Category title={"Sports"} icon={<PoolIcon />} />
-        <Category title={"Animals"} icon={<PetsIcon />} />
-        <Category title={"Vehicles"} icon={<DirectionsCarIcon />} />
-        <Category title={"Film"} icon={<VideocamIcon />} />
-        <Category title={"Music"} icon={<MusicNoteIcon />} />
+        <Category
+          title="General Knowledge"
+          category_id="9"
+          icon={<MenuBookIcon className={classes.Icon} />}
+        />
+        <Category
+          title="Sports"
+          category_id="21"
+          icon={<PoolIcon className={classes.Icon} />}
+        />
+        <Category
+          title="Celebrities"
+          category_id="26"
+          icon={<CameraAltIcon className={classes.Icon} />}
+        />
+        <Category
+          title="Art"
+          category_id="25"
+          icon={<BrushIcon className={classes.Icon} />}
+        />
+        <Category
+          title="Film"
+          category_id="10"
+          icon={<VideocamIcon className={classes.Icon} />}
+        />
+        <Category
+          title="History"
+          category_id="23"
+          icon={<HourglassEmptyIcon className={classes.Icon} />}
+        />
       </div>
     </div>
   );

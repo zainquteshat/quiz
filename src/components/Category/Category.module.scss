@@ -1,17 +1,22 @@
 .Category {
   border: 1px solid grey;
+  border-radius: 8px;
   flex: 1 0 33%;
-  width: 50%;
+  // flex: 1 0 25%;
+  width: 25%;
   margin: 15px;
-  padding: 18px;
-  background-color: yellowgreen;
+  padding: 20px;
+  background-color: #4ae3b0;
   text-align: center;
+  text-decoration: none;
+  cursor: pointer;
 }
 .Icon {
   color: white;
   margin-bottom: 20px;
 }
 .Title {
-  color: white;
+  color: #38484b;
   font-weight: 800;
+  font-size: 18px;
 }
