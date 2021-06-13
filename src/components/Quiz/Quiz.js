@@ -1,101 +1,106 @@
 import { useEffect, useState, useCallback } from "react";
-
 import { useQuery } from "../../hooks/useQuery";
+
 import QuizHeader from "./QuizHeader/QuizHeader";
 import Question from "./Question/Question";
 import Result from "../Result/Result";
-import NewQuizLink from "../NewQuizLink/NewQuizLink";
-
-import _ from "lodash";
 
 import classes from "./Quiz.module.scss";
 
-const Quiz = (props) => {
+const QUESTIONS_AMOUNT = 10;
+const SCORE_INCREMENT_VALUE = 10;
+
+// TODO: Add to axios interceptor
+const API_ENDPOINT = "https://opentdb.com/api.php";
+
+const Quiz = () => {
   const query = useQuery("");
   const [questions, setQuestions] = useState([]);
   const [categoryId, setCategoryId] = useState(null);
-  let [activeStep, setActiveStep] = useState(0);
-  let [score, setScore] = useState(0);
-
-  const [chosenCategory, setChosenCategory] = useState("");
+  const [chosenCategoryTitle, setChosenCategoryTitle] = useState("");
+  const [activeStep, setActiveStep] = useState(0);
+  const [score, setScore] = useState(0);
 
   const fetchQuestions = useCallback(() => {
-    fetch(`https://opentdb.com/api.php?amount=10&category=${categoryId}`).then(
-      (response) => {
-        response.json().then((jsRes) => {
-          setQuestions(jsRes.results);
-          console.log("jsRes.results.length: " + jsRes.results.length);
-        });
-      }
-    );
+    // TODO: Replace fetch with axios
+    // TODO: Handle errors
+    fetch(
+      `${API_ENDPOINT}?amount=${QUESTIONS_AMOUNT}&category=${categoryId}`
+    ).then((response) => {
+      response.json().then((jsonResponse) => {
+        setQuestions(jsonResponse.results);
+      });
+    });
   }, [categoryId]);
 
-  useEffect(() => {
-    setCategoryId(query.get("category_id"));
-    setChosenCategory(query.get("chosen_category"));
-    categoryId ? fetchQuestions() : console.log("category id is invalid");
-  }, [categoryId]);
-
-  const optionClickedHandler = (isCorrect) => {
+  const onAnswerClicked = (isCorrect) => {
     if (isCorrect) {
-      setScore((prevState) => prevState + 10);
+      setScore((prevState) => prevState + SCORE_INCREMENT_VALUE);
     }
     setActiveStep((prevState) => prevState + 1);
   };
 
-  const renderQuestions = () => {
-    let questionsDiv;
-    if (!questions) {
-      questionsDiv = <p> Loading </p>;
-    } else if (activeStep < 10) {
-      if (questions.length) {
-        questionsDiv = (
-          <>
-            <div>
-              <Question
-                question={questions[activeStep].question}
-                correctAnswer={questions[activeStep].correct_answer}
-                allAnswers={[
-                  ...questions[activeStep].incorrect_answers,
-                  questions[activeStep].correct_answer,
-                ]}
-                optionClickedHandler={optionClickedHandler}
-              />
-            </div>
-          </>
-        );
-      }
-    }
-
-    return questionsDiv;
+  const hasNoQuestions = () => {
+    return !questions.length;
   };
 
-  return (
-    <div className={classes.Quiz}>
-      {activeStep < 10 ? (
+  const isQuizFinished = () => {
+    return activeStep === 10;
+  };
+
+  const renderQuizHeader = () => {
+    return (
+      !isQuizFinished() && (
         <QuizHeader
           score={score}
           activeStep={activeStep}
-          chosenCategory={chosenCategory}
+          chosenCategoryTitle={chosenCategoryTitle}
         />
-      ) : (
-        ""
-      )}
-      {renderQuestions()}
-      {activeStep === 10 ? <Result score={score} /> : ""}
+      )
+    );
+  };
 
-      {!questions.length ? (
-        <h3 className={classes.errAlert}>
-          <p className={classes.errTxt}>Something Went Wrong!</p>
-          <NewQuizLink />
-        </h3>
-      ) : (
-        ""
-      )}
+  const renderSpinner = () => {
+    // TODO: Replace Loading with CSS Spinner
+    return <p> Loading </p>;
+  };
+
+  const activeQuestion = questions[activeStep];
+
+  const renderQuestions = () => {
+    if (hasNoQuestions()) {
+      return renderSpinner();
+    }
+
+    if (!isQuizFinished()) {
+      const { question, correct_answer, incorrect_answers } = activeQuestion;
+      return (
+        <Question
+          question={question}
+          correctAnswer={correct_answer}
+          onAnswerClicked={onAnswerClicked}
+          allAnswers={[...incorrect_answers, correct_answer]}
+        />
+      );
+    }
+  };
+
+  const renderQuizResults = () => {
+    return isQuizFinished() && <Result score={score} />;
+  };
+
+  useEffect(() => {
+    setCategoryId(query.get("category_id"));
+    setChosenCategoryTitle(query.get("chosen_category"));
+    fetchQuestions();
+  }, [categoryId]);
+
+  return (
+    <div className={classes.Quiz}>
+      {renderQuizHeader()}
+      {renderQuestions()}
+      {renderQuizResults()}
     </div>
   );
 };
 export default Quiz;
-
-// let stringifiedJSON = JSON.stringify(jsRes.results);
-// let cleanRes = stringifiedJSON.replace(/[^a-zA-Z0-9]/g, "");

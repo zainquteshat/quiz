@@ -1,41 +1,45 @@
-import _ from "lodash";
 import classes from "./Question.module.scss";
 
-const Question = ({
-  question,
-  correctAnswer,
-  allAnswers,
-  optionClickedHandler,
-}) => {
+const Question = ({ question, correctAnswer, allAnswers, onAnswerClicked }) => {
   const shuffledAnswers = allAnswers.sort(() => Math.random() - 0.5);
 
-  const answerClicked = (asnw) => {
-    let isCorrect = asnw === correctAnswer;
-    optionClickedHandler(isCorrect);
+  const isCorrectAnswer = (clickedAnswer) => {
+    return clickedAnswer === correctAnswer;
   };
 
-  function createMarkup(question) {
-    return { __html: question };
-    // return _ .unescape(question);
+  const answerClicked = (clickedAnswer) => {
+    let isCorrect = isCorrectAnswer(clickedAnswer);
+    onAnswerClicked(isCorrect);
+  };
+
+  function createMarkup(data) {
+    // TODO:Find an alternative
+    return { __html: data };
   }
+
+  const renderQuestion = () => (
+    <p
+      className={classes.Question}
+      dangerouslySetInnerHTML={createMarkup(question)}
+    ></p>
+  );
+  const renderShuffledAnswers = () => {
+    return shuffledAnswers.map((answer) => {
+      return (
+        <button
+          key={answer}
+          className={classes.Option}
+          onClick={() => answerClicked(answer)}
+          dangerouslySetInnerHTML={createMarkup(answer)}
+        />
+      );
+    });
+  };
 
   return (
     <div className={classes.QuestionSection}>
-      <p
-        className={classes.Question}
-        dangerouslySetInnerHTML={createMarkup(question)}
-      ></p>
-      {shuffledAnswers.map((asnw, indx) => {
-        return (
-          <button
-            key={indx}
-            className={classes.Option}
-            onClick={() => answerClicked(asnw)}
-          >
-            {asnw}
-          </button>
-        );
-      })}
+      {renderQuestion()}
+      {renderShuffledAnswers()}
     </div>
   );
 };
